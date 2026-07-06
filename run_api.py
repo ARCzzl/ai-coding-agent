@@ -17,6 +17,7 @@
 """
 
 import sys
+import webbrowser
 import argparse
 from pathlib import Path
 
@@ -41,10 +42,14 @@ def main():
         print("请参考 .env.example 文件配置 .env")
         sys.exit(1)
 
-    print(f"\n🚀 启动领克汽车智能销售顾问 API 服务")
+    print(f"\n启动领克汽车智能销售顾问 API 服务")
     print(f"  地址: http://{args.host}:{args.port}")
     print(f"  文档: http://{args.host}:{args.port}/docs")
     print(f"  模型: {settings.LLM_MODEL}\n")
+
+    # 自动打开浏览器访问 API 文档
+    browser_host = "localhost" if args.host in ("0.0.0.0", "::") else args.host
+    webbrowser.open(f"http://{browser_host}:{args.port}/docs")
 
     uvicorn.run(
         "api.server:app",

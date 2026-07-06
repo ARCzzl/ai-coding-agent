@@ -1,17 +1,3 @@
-"""
-Agent 工具模块
-
-定义了 Agent 可调用的所有工具函数：
-
-1. car_info_rag:      领克汽车知识库检索
-2. calculate_car_loan: 购车贷款计算器
-3. compare_models:     车型对比（新增）
-
-工具设计原则：
-- 每个工具职责单一
-- docstring 是 Agent 判断何时调用的唯一依据，必须清晰
-- 返回值结构化，便于 Agent 理解
-"""
 
 import logging
 from typing import Optional, List
@@ -81,7 +67,7 @@ def car_info_rag(query: str) -> str:
     """
     global _rag_retriever
     if _rag_retriever is None:
-        return "⚠️ 知识库尚未初始化，请联系管理员。"
+        return "知识库尚未初始化，请联系管理员。"
 
     try:
         docs = _rag_retriever.invoke(query)
@@ -187,16 +173,16 @@ def calculate_car_loan(
     result = (
         f"【{car_model} 贷款购车方案】\n"
         f"{'─' * 32}\n"
-        f"💰 参考车价：{price:.2f} 万元\n"
-        f"📌 首付 {down_payment_ratio}%：{down_payment:.2f} 万元\n"
-        f"🏦 贷款金额：{loan_amount:.2f} 万元\n"
-        f"📅 贷款年限：{loan_years} 年（年利率 {annual_rate * 100}%）\n"
+        f" 参考车价：{price:.2f} 万元\n"
+        f"首付 {down_payment_ratio}%：{down_payment:.2f} 万元\n"
+        f"贷款金额：{loan_amount:.2f} 万元\n"
+        f" 贷款年限：{loan_years} 年（年利率 {annual_rate * 100}%）\n"
         f"{'─' * 32}\n"
-        f"💳 每月还款：{monthly_payment_wy:.2f} 元\n"
-        f"📊 总利息：{total_interest:.2f} 元\n"
-        f"💵 总花费：{down_payment + total_payment:.2f} 万元\n"
+        f"每月还款：{monthly_payment_wy:.2f} 元\n"
+        f" 总利息：{total_interest:.2f} 元\n"
+        f"总花费：{down_payment + total_payment:.2f} 万元\n"
         f"{'─' * 32}\n"
-        f"📝 注：以上为等额本息计算，实际以银行审批为准"
+        f"注：以上为等额本息计算，实际以银行审批为准"
     )
     return result
 
@@ -230,17 +216,17 @@ def compare_lynkco_models(model_a: str, model_b: str) -> str:
     return (
         f"【{model_a} vs {model_b} 对比】\n"
         f"{'─' * 40}\n"
-        f"🚗 {model_a}\n"
+        f" {model_a}\n"
         f"   参考价: {price_a:.2f} 万元\n"
         f"   定位: {desc_a}\n"
         f"\n"
-        f"🚗 {model_b}\n"
+        f" {model_b}\n"
         f"   参考价: {price_b:.2f} 万元\n"
         f"   定位: {desc_b}\n"
         f"{'─' * 40}\n"
-        f"💰 价差: {diff:.2f} 万元（{cheaper} 更实惠）\n"
+        f" 价差: {diff:.2f} 万元（{cheaper} 更实惠）\n"
         f"\n"
-        f"📝 选择建议：\n"
+        f" 选择建议：\n"
         f"  - 预算优先 → 选择 {cheaper}\n"
         f"  - 配置/体验优先 → 建议实地试驾两款车后决定\n"
     )

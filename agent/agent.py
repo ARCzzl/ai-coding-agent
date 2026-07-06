@@ -1,22 +1,3 @@
-"""
-Agent 模块：智能销售顾问
-
-基于 LangChain Agent 框架，集成：
-- 工具调用 (Tool Calling): 自动选择最合适的工具
-- 多轮记忆: 保持对话上下文连贯性
-- 结构化提示词: 约束 Agent 的行为边界
-
-Agent 类型选择：
-- Tool Calling Agent: 依赖模型的 function calling 能力，最推荐
-- ReAct Agent: 基于推理-行动循环，兼容性更好但 token 消耗大
-- OpenAI Functions Agent: 专为 OpenAI 优化，此处用兼容接口
-
-面试要点：
-- Agent 的本质 = LLM + 工具 + 规划(Reasoning)
-- Tool Calling vs ReAct 的区别
-- 为什么需要 Agent 框架而不直接调 LLM？
-  → Agent 可以自主决定何时检索、何时计算、何时直接回答
-"""
 
 import logging
 from typing import Optional, Dict, Any

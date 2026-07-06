@@ -1,24 +1,12 @@
 """
-========================================================================================
  领克汽车智能销售顾问 — CLI 交互入口
-========================================================================================
-
-使用方法:
-    python app.py          # 启动交互式对话
-    python app.py --eval   # 运行评估
-    python app.py --help   # 查看帮助
-
-环境变量配置:
-    1. 复制 .env.example 为 .env
-    2. 在 .env 中填入你的 LLM_API_KEY
-    3. 确保 Ollama 已启动（用于本地 embedding）
 """
-
+import os
 import argparse
 import logging
 import sys
 from pathlib import Path
-
+os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
 # 确保项目根目录在 Python 路径中
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -73,28 +61,28 @@ def interactive_chat():
                 continue
 
             if question.lower() == "exit":
-                print("\n👋 感谢咨询领克汽车，再见！")
+                print("\n感谢咨询领克汽车，再见！")
                 break
 
             if question.lower() == "reset":
                 agent.reset_memory()
-                print("🔄 对话记忆已清除\n")
+                print("对话记忆已清除\n")
                 continue
 
             if question.lower() == "stats":
                 stats = agent.get_memory_stats()
-                print(f"📊 对话统计: {stats}\n")
+                print(f" 对话统计: {stats}\n")
                 continue
 
             # 调用 Agent
             response = agent.chat(question)
-            print(f"\n🤖 小领: {response}\n")
+            print(f"\n小领: {response}\n")
 
         except KeyboardInterrupt:
-            print("\n\n👋 再见！")
+            print("\n\n 再见！")
             break
         except Exception as e:
-            print(f"\n❌ 错误: {e}\n")
+            print(f"\n错误: {e}\n")
 
 
 def run_evaluation():
@@ -142,9 +130,9 @@ def main():
 
     # 启动前检查
     try:
-        settings.validate()
+        settings.validate() 
     except (ValueError, FileNotFoundError) as e:
-        print(f"❌ 配置错误: {e}")
+        print(f"配置错误: {e}")
         print("请参考 .env.example 文件配置 .env")
         sys.exit(1)
 

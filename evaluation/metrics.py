@@ -1,25 +1,3 @@
-"""
-评估模块：RAGAS 评估体系
-
-RAG 系统的质量需要量化的指标来衡量和优化。本模块实现了：
-
-1. RAGAS 核心指标（需要 LLM 评判）:
-   - Faithfulness (忠实度):    回答是否完全基于检索到的文档，有无编造
-   - Answer Relevancy (答案相关性): 回答与问题的相关程度
-   - Context Recall (上下文召回率): 检索到的文档覆盖了多少 ground_truth
-   - Context Precision (上下文精确度): 检索到的文档中有多少真正相关
-
-2. 传统检索指标:
-   - Recall@K:       Top-K 中是否包含相关文档
-   - MRR (Mean Reciprocal Rank): 第一个相关文档的排名倒数均值
-   - Hit Rate:       至少命中一个相关文档的比例
-
-面试要点：
-- Faithfulness 是最关键的指标 → 直接衡量"幻觉"问题
-- Context Recall 评估检索是否有遗漏
-- Context Precision 评估检索是否有噪音
-- 不同场景关注不同指标：客服→忠实度优先，搜索→召回率优先
-"""
 
 import logging
 from typing import List, Optional

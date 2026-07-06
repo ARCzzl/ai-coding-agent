@@ -25,7 +25,7 @@ class Settings:
 
     # ========== LLM 配置 ==========
     LLM_MODEL: str = os.getenv("LLM_MODEL", "qwen3.6-plus")
-    LLM_API_KEY: str = os.getenv("LLM_API_KEY", "YOUR_API_KEY_PLACEHOLDER")
+LLM_API_KEY: str = os.getenv("LLM_API_KEY", "")
     LLM_BASE_URL: str = os.getenv(
         "LLM_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"
     )

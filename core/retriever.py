@@ -1,18 +1,3 @@
-"""
-核心模块：高级检索器
-
-检索是整个 RAG 系统的核心，本模块实现了：
-
-1. 稠密检索 (Dense): 基于 embedding 向量相似度 → 语义匹配
-2. 稀疏检索 (Sparse/BM25): 基于词频统计 → 关键词精确匹配
-3. 混合检索 (Hybrid): Dense + Sparse 加权融合 → 互补优势
-4. 查询重写 (Query Rewriting): 多角度生成查询 → 提高召回率
-
-面试要点：
-- 理解为什么需要混合检索（语义 vs 关键词的互补性）
-- 理解查询重写的价值（用户问题 ≠ 索引文档的表达方式）
-- 了解 RRF (Reciprocal Rank Fusion) 作为备选融合策略
-"""
 
 import logging
 from typing import List, Optional
@@ -121,14 +106,10 @@ def create_hybrid_retriever(
 ) -> EnsembleRetriever:
     """
     创建混合检索器
-
     融合策略：加权线性组合 (weighted linear combination)
     - Dense (向量检索): 高权重(0.7) → 语义理解为主
     - Sparse (BM25):     低权重(0.3) → 关键词兜底
 
-    备选方案：RRF (Reciprocal Rank Fusion)
-    - 不依赖分数的绝对大小，只关注排名
-    - 适合不同检索器的分数分布差异大时使用
     """
     bm25_weight = bm25_weight or settings.BM25_WEIGHT
     vector_weight = vector_weight or settings.VECTOR_WEIGHT
@@ -154,19 +135,11 @@ def rewrite_query_multi_perspective(
 ) -> List[str]:
     """
     多视角查询重写 (Multi-Query Rewriting)
-
     原理：
     - 用户问题可能只有一种表达方式
     - 文档可能用不同的措辞描述同一内容
     - 用 LLM 生成多个等价表述，分别检索，合并结果
-
-    举例：
-    - 原问题: "领克03多少钱"
-    - 重写1: "领克03的价格是多少"
-    - 重写2: "领克03售价及落地价格"
-    - 重写3: "购买领克03需要多少预算"
-
-    效果：显著提高召回率，但增加了检索次数
+    显著提高召回率，但增加了检索次数
     """
     num_queries = num_queries or settings.MULTI_QUERY_COUNT
 

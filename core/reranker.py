@@ -1,16 +1,3 @@
-"""
-核心模块：重排序器
-
-初检索返回的文档虽然相关，但排序可能不精确。
-重排序器使用更强的 Cross-Encoder 模型对候选文档进行精细排序。
-
-Cross-Encoder vs Bi-Encoder:
-- Bi-Encoder: query 和 doc 分别编码，速度快但交互弱 → 用于初检索
-- Cross-Encoder: query 和 doc 联合编码，精度高但速度慢 → 用于重排序
-
-典型的 RAG 检索流程:
-    用户问题 → 初检索(Bi-Encoder, 召回100+) → 重排序(Cross-Encoder, 保留top3) → LLM生成
-"""
 
 import logging
 from typing import List
@@ -32,17 +19,6 @@ def create_reranker(
 ) -> CrossEncoderReranker:
     """
     创建 Cross-Encoder 重排序器
-
-    Args:
-        model_name: HuggingFace 模型名，推荐:
-            - BAAI/bge-reranker-large (中文能力强)
-            - BAAI/bge-reranker-v2-m3 (多语言)
-            - maidalun1020/bce-reranker-base_v1 (中文专用)
-        top_n: 重排序后保留的文档数
-
-    注意：
-    - 初检索召回 5-10 个候选，重排序后取 top 3
-    - 这个 pipeline 比单纯增加初检索 K 值效果更好
     """
     model_name = model_name or settings.RERANKER_MODEL
     top_n = top_n or settings.RERANKER_TOP_N
@@ -85,13 +61,10 @@ def build_compression_retriever(
 class FallbackRetriever(BaseRetriever):
     """
     带降级策略的检索器
-
     当主检索器返回空结果时，自动降级到备用检索策略：
     1. 尝试去掉重排序，直接用基础检索器
     2. 尝试只用 BM25 关键词检索
     3. 返回预先定义的兜底回答
-
-    这体现了生产环境的鲁棒性设计思维。
     """
 
     primary_retriever: BaseRetriever

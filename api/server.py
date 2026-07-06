@@ -1,25 +1,7 @@
-"""
-FastAPI 服务化模块
-
-将 RAG Agent 封装为 RESTful API，支持：
-- 普通对话接口: POST /chat
-- 流式对话接口: POST /chat/stream (SSE)
-- 健康检查:     GET /health
-- 记忆管理:     DELETE /memory
-
-使用方式:
-    uvicorn api.server:app --host 0.0.0.0 --port 8000 --reload
-
-面试要点：
-- 为什么需要流式输出？ → 降低用户等待感知时间
-- SSE vs WebSocket 的选择？ → SSE 单向推送更简单，适合生成场景
-- 异步处理的价值？ → 不阻塞主线程，提高并发能力
-"""
 
 import logging
 import asyncio
 from typing import Optional, AsyncIterator
-
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
