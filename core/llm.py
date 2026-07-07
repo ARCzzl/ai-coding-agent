@@ -1,12 +1,3 @@
-"""
-核心模块：LLM 封装
-
-统一 LLM 调用的入口，负责：
-1. 模型初始化（支持 OpenAI 兼容 API）
-2. 流式/非流式调用
-3. Token 统计
-4. 重试与异常处理
-"""
 
 import logging
 from typing import AsyncIterator
@@ -24,28 +15,7 @@ def create_llm(
     top_p: float = None,
     streaming: bool = False,
 ) -> ChatOpenAI:
-    """
-    创建 LLM 实例
 
-    使用 OpenAI 兼容 API，支持：
-    - 阿里云百炼 (DashScope)
-    - Ollama 本地模型
-    - 任何兼容 OpenAI API 的服务
-
-    Args:
-        model: 模型名
-        temperature: 温度参数 (0-2)，越高越随机
-        top_p: 核采样参数
-        streaming: 是否启用流式输出
-
-    Temperature 选择建议:
-    - 检索/RAG任务: 0.3-0.7 (需要事实准确性)
-    - 创意写作: 0.8-1.2
-    - 代码生成: 0.1-0.3
-    - 对话: 0.7-1.0
-
-    ⚠️ 注意: API Key 必须通过环境变量设置，严禁硬编码
-    """
     if not settings.LLM_API_KEY:
         raise ValueError(
             "LLM_API_KEY 未设置！请在 .env 文件中配置，"
