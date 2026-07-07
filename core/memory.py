@@ -1,23 +1,3 @@
-"""
-核心模块：对话记忆管理
-
-实现多种记忆策略，解决多轮对话中的上下文管理问题：
-
-策略对比：
-┌──────────────────┬──────────────┬──────────────┬──────────────┐
-│     策略          │   记忆范围    │    Token 消耗  │   适用场景    │
-├──────────────────┼──────────────┼──────────────┼──────────────┤
-│ BufferMemory     │ 全部对话     │ 线性增长     │ 短对话       │
-│ WindowMemory     │ 最近 K 轮    │ 恒定         │ 长对话       │
-│ SummaryMemory    │ 摘要 + 最近  │ 可控         │ 长对话+细节  │
-│ TokenBufferMemory│ Token 限额   │ 上限控制     │ 生产环境     │
-└──────────────────┴──────────────┴──────────────┴──────────────┘
-
-面试要点：
-- 理解"记忆"的本质是 prompt 中的上下文窗口管理
-- 知道 token 限制对记忆策略的影响
-- 了解 RAG 本身也是一种"外部记忆"
-"""
 
 import logging
 from langchain_classic.memory import (
@@ -38,9 +18,6 @@ def create_buffer_memory(
     """
     完整对话缓冲记忆
 
-    优点: 保留所有历史，信息完整
-    缺点: Token 线性增长，长对话可能超出上下文窗口
-    适用: 短对话（< 10 轮）
     """
     return ConversationBufferMemory(
         return_messages=return_messages,
@@ -56,11 +33,6 @@ def create_window_memory(
     """
     滑动窗口记忆
 
-    只保留最近 K 轮对话，旧对话自动丢弃。
-    优点: Token 消耗恒定
-    缺点: 丢失早期的上下文信息
-    适用: 客服场景、单次会话较长但不需要跨话题记忆
-    """
     return ConversationBufferWindowMemory(
         k=k,
         return_messages=return_messages,
@@ -80,8 +52,6 @@ def create_summary_memory(
     当对话变长时，用 LLM 对早期对话生成摘要，保留关键信息。
     结合"摘要 + 最近对话"，兼顾信息保留和 token 控制。
 
-    优点: 在 token 预算内保留更多有效信息
-    缺点: 摘要过程有信息损失，依赖 LLM 摘要质量
     """
     if llm is None:
         from langchain_openai import ChatOpenAI
